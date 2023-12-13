@@ -1,5 +1,6 @@
 ﻿using API.Data;
 using API.Interfaces;
+using API.Middleware;
 using Company.ClassLibrary1;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,7 @@ public static class AppServiceExtensions
         services.AddCors();
 
         services.AddScoped<ITokenService, TokenService>();
-
+        // services.AddSingleton<ExceptionMiddleware>();
 
 
 
