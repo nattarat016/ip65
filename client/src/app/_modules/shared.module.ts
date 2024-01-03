@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common'
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { ToastrModule } from 'ngx-toastr'
 import { TabsModule } from 'ngx-bootstrap/tabs'
+import { NgxSpinnerModule } from 'ngx-spinner'
 
 
 
@@ -15,11 +16,13 @@ import { TabsModule } from 'ngx-bootstrap/tabs'
       positionClass: 'inline'
     }),
     TabsModule.forRoot(),
+    NgxSpinnerModule.forRoot({ type: 'square-spin' }),
   ],
   exports: [
     BsDropdownModule,
     ToastrModule,
-    TabsModule
+    TabsModule,
+    NgxSpinnerModule,
   ]
 })
 export class SharedModule { }

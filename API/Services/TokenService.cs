@@ -6,7 +6,7 @@ using API.Entities;
 using API.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Company.ClassLibrary1;
+namespace API.Services;
 
 public class TokenService : ITokenService
 {

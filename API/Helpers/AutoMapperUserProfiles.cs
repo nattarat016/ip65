@@ -23,5 +23,6 @@ public class AutoMapperUserProfiles : Profile
                 opt => opt.MapFrom(user => user.BirthDate.CalculateAge())
             );
         CreateMap<Photo, PhotoDto>();
+        CreateMap<MemberUpdateDto, AppUser>();
     }
 }

@@ -13,26 +13,27 @@
                     <a class="nav-link" href="#" routerLink="messages" routerLinkActive="active">Messages</a>
                 </li>
             </ng-container>
-            </ul>
+        </ul>
 
 
 
 
-        <form *ngIf="!(currentUser$ | async)" #logingForm="ngForm" (ngSubmit)="login()" autocomplete="off" class="d-flex">
-            <input  name="username" [(ngModel)]="model.username" 
-             class="form-control me-2" type="text" placeholder="Username">
-            <input name="password" [(ngModel)]="model.password" 
-             class="form-control me-2" type="password" placeholder="Password">
+        <form *ngIf="!(currentUser$ | async)" #logingForm="ngForm" (ngSubmit)="login()" autocomplete="off"
+            class="d-flex">
+            <input name="username" [(ngModel)]="model.username" class="form-control me-2" type="text"
+                placeholder="Username">
+            <input name="password" [(ngModel)]="model.password" class="form-control me-2" type="password"
+                placeholder="Password">
             <button class="btn btn-outline-success" type="submit">Login</button>
         </form>
 
         <div dropdown class="dropdown" *ngIf="(currentUser$ | async) as user">
             <a dropdownToggle class="text-decoration-none dropdown-toggle text-light">Hello {{user.username}}</a>
             <div *bsDropdownMenu="" class="dropdown-menu">
-                <a href="" class="dropdown-item">Profile</a>
+                <a class="dropdown-item" routerLink="member/profile">Profile</a>
                 <a href="" class="dropdown-item " (click)="logout()">Logout</a>
             </div>
         </div>
-        
+
     </div>
 </nav>
