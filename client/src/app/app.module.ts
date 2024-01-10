@@ -7,7 +7,7 @@ import { AppComponent } from './app.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { NavComponent } from './nav/nav.component'
-import { FormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { HomeComponent } from './home/home.component'
 import { RegisterComponent } from './register/register.component'
@@ -24,8 +24,9 @@ import { ServerErrorComponent } from './errors/server-error/server-error.compone
 import { MemberCardComponent } from './members/member-card/member-card.component'
 import { JwtInterceptor } from './_interceptors/jwt.interceptor'
 import { MemberProfileComponent } from './members/member-profile/member-profile.component'
-import { LoadingInterceptor } from './_interceptors/loading.interceptor';
-import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component'
+import { LoadingInterceptor } from './_interceptors/loading.interceptor'
+import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
+import { TextInputComponent } from './_forms/text-input/text-input.component'
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { PhotoEditorComponent } from './members/photo-editor/photo-editor.compon
     ServerErrorComponent,
     MemberCardComponent,
     MemberProfileComponent,
-    PhotoEditorComponent
+    PhotoEditorComponent,
+    TextInputComponent
   ],
   imports: [
     BrowserModule,
@@ -52,6 +54,7 @@ import { PhotoEditorComponent } from './members/photo-editor/photo-editor.compon
     FontAwesomeModule,
     FormsModule,
     SharedModule,
+    ReactiveFormsModule,
     BsDropdownModule.forRoot(),
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right'
