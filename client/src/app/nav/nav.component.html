@@ -28,6 +28,7 @@
         </form>
 
         <div dropdown class="dropdown" *ngIf="(currentUser$ | async) as user">
+            <img src="{{user.photoUrl || './assets/images/default-user.png'}}" alt="{{user.username}} photo">
             <a dropdownToggle class="text-decoration-none dropdown-toggle text-light">Hello {{user.username}}</a>
             <div *bsDropdownMenu="" class="dropdown-menu">
                 <a class="dropdown-item" routerLink="member/profile">Profile</a>
