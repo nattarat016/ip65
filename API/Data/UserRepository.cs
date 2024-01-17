@@ -71,6 +71,11 @@ public class UserRepository : IUserRepository
         query = query.Where(user => user.UserName != userParams.CurrentUserName);
         if (userParams.Gender != "non-binary")
             query = query.Where(user => user.Gender == userParams.Gender);
+        query = userParams.OrderBy switch
+        {
+            "created" => query.OrderByDescending(user => user.Created),
+            _ => query.OrderByDescending(user => user.LastActive),
+        };
         query.AsNoTracking();
 
 

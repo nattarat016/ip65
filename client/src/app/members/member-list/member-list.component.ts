@@ -19,7 +19,7 @@ export class MemberListComponent implements OnInit {
   user: User | undefined
   genderList = [
     { value: 'male', display: 'Male' },
-    { value: 'fmale', display: 'Female' },
+    { value: 'female', display: 'Female' },
     { value: 'non-binary', display: 'Non-binary' },
   ]
 
