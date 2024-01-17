@@ -3,6 +3,7 @@ using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -37,11 +38,25 @@ public class UsersController : BaseApiController
 
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
+    public async Task<ActionResult<PageList<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
     {
-        // var users = await _userRepository.GetUsersAsync();
-        // return Ok(_mapper.Map<IEnumerable<MemberDto>>(users));
-        return Ok(await _userRepository.GetMembersAsync());
+        var username = User.GetUsername();
+        if (username is null) return NotFound();
+
+        var currentUser = await _userRepository.GetUserByUserNameAsync(username);
+        if (currentUser is null) return NotFound();
+        userParams.CurrentUserName = currentUser.UserName;
+        if (string.IsNullOrEmpty(userParams.Gender))
+        {
+            if (currentUser.Gender != "non-binary")
+                userParams.Gender = currentUser.Gender == "male" ? "female" : "male";
+            else
+                userParams.Gender = "non-binary";
+        }
+        var pages = await _userRepository.GetMembersAsync(userParams);
+        Response.AddPaginationHeader(
+            new PaginationHeader(pages.CurrentPage, pages.PageSize, pages.TotalCount, pages.TotalPages));
+        return Ok(pages);
     }
 
     [HttpGet("{id}")] //endpoint: /api/users/25         ,when id = 25

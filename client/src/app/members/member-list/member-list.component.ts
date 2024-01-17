@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core'
-import { Observable } from 'rxjs'
+import { Observable, take } from 'rxjs'
 import { Member } from 'src/app/_models/member '
+import { Pagination } from 'src/app/_models/pagination'
+import { User } from 'src/app/_models/user'
+import { UserParams } from 'src/app/_models/userParams'
+import { AccountService } from 'src/app/_services/account.service'
 import { MembersService } from 'src/app/_services/members.service'
 
 @Component({
@@ -9,22 +13,59 @@ import { MembersService } from 'src/app/_services/members.service'
   styleUrls: ['./member-list.component.css']
 })
 export class MemberListComponent implements OnInit {
-  // members: Member[] = []
-  members$: Observable<Member[]> | undefined
+  members: Member[] = []
+  pagination: Pagination | undefined
+  userParams: UserParams | undefined
+  user: User | undefined
+  genderList = [
+    { value: 'male', display: 'Male' },
+    { value: 'fmale', display: 'Female' },
+    { value: 'non-binary', display: 'Non-binary' },
+  ]
 
-  constructor(private memberService: MembersService) { }
 
-  ngOnInit(): void {
-    this.members$ = this.memberService.getMembers()
+
+  constructor(private accountService: AccountService, private memberService: MembersService) {
+    this.accountService.currentUser$.pipe(take(1)).subscribe({
+      next: user => {
+        if (user) {
+          this.userParams = new UserParams(user)
+          this.user = user
+        }
+      }
+    })
   }
 
-  // loadMember() {
-  //   this.memberService.getMembers().subscribe({
-  //     next: resp => {
-  //       this.members = resp
-  //       console.log(resp)
-  //     },
-  //     error: err => console.log(err)
-  //   })
-  // }
+
+
+  ngOnInit(): void {
+    this.loadMember()
+  }
+
+  loadMember() {
+    if (!this.userParams) return
+    this.memberService.getMembers(this.userParams).subscribe({
+      next: response => {
+        if (response.result && response.pagination) {
+          this.members = response.result
+          this.pagination = response.pagination
+        }
+      }
+    })
+  }
+
+  pageChanged(event: any) {
+    if (!this.userParams) return
+    if (this.userParams.pageNumber === event.page) return
+    this.userParams.pageNumber = event.page
+    this.loadMember()
+  }
+
+  resetFilters() {
+    if (this.user) {
+      this.userParams = new UserParams(this.user)
+      this.loadMember()
+    }
+  }
+
 }
