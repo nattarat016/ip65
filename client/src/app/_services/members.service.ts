@@ -41,9 +41,12 @@ export class MembersService {
     params = params.append('minAge', userParams.minAge)
     params = params.append('maxAge', userParams.maxAge)
     params = params.append('gender', userParams.gender)
+    params = params.append('orderBy', userParams.orderBy)
     const url = this.baseUrl + 'users'
     return this.getPaginationResult<Member[]>(url, params)
   }
+
+  
   private getPaginationResult<T>(url: string, params: HttpParams) {
     const paginationResult: PaginationResult<T> = new PaginationResult<T>
     return this.http.get<T>(url, { observe: 'response', params }).pipe(
