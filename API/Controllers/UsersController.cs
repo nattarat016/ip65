@@ -59,6 +59,7 @@ public class UsersController : BaseApiController
         return Ok(pages);
     }
 
+
     [HttpGet("{id}")] //endpoint: /api/users/25         ,when id = 25
     public async Task<ActionResult<MemberDto?>> GetUser(int id)
     {
@@ -79,7 +80,7 @@ public class UsersController : BaseApiController
     {
         // var user = await _userRepository.GetUserByUserNameAsync(username);
         // return _mapper.Map<MemberDto>(user);
-        return await _userRepository.GetMemberAsync(username);
+        return await _userRepository.GetMemberByUserNameAsync(username);
     }
 
     [HttpPut]

@@ -1,5 +1,7 @@
+
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core'
 import { NgForm } from '@angular/forms'
+import { TimeagoModule } from 'ngx-timeago'
 import { ToastrService } from 'ngx-toastr'
 import { take } from 'rxjs'
 import { Member } from 'src/app/_models/member '
@@ -10,7 +12,8 @@ import { MembersService } from 'src/app/_services/members.service'
 @Component({
   selector: 'app-member-profile',
   templateUrl: './member-profile.component.html',
-  styleUrls: ['./member-profile.component.css']
+  styleUrls: ['./member-profile.component.css'],
+
 })
 export class MemberProfileComponent implements OnInit {
   @ViewChild('profileForm') profileForm: NgForm | undefined

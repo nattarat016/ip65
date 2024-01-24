@@ -10,7 +10,11 @@ public interface IUserRepository
     Task<bool> SaveAllAsync();
     Task<AppUser?> GetUserByIdAsync(int id);
     Task<AppUser?> GetUserByUserNameAsync(string username);
+    Task<AppUser?> GetUserByUserNameWithOutPhotoAsync(string username);
     // Task<IEnumerable<AppUser>> GetUsersAsync();
+    //Task<IEnumerable<MemberDto>> GetMembersAsync();
     Task<PageList<MemberDto>> GetMembersAsync(UserParams userParams);
-    Task<MemberDto?> GetMemberAsync(string username);
+    Task<MemberDto?> GetMemberByUserNameAsync(string username);
+
+    // object? GetMembersAsync(ClaimsPrincipal user);
 }
