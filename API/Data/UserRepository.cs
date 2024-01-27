@@ -21,13 +21,13 @@ public class UserRepository : IUserRepository
         _mapper = mapper;
     }
 
-    public async Task<MemberDto?> GetUserByIdAsync(int id)
+    public async Task<AppUser?> GetUserByIdAsync(int id)
     {
-        // return await _dataContext.Users.FindAsync(id);
-        return await _dataContext.Users
-            .Where(user => user.Id == id)
-            .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-            .SingleOrDefaultAsync();
+        return await _dataContext.Users.FindAsync(id);
+        // return await _dataContext.Users
+        //     .Where(user => user.Id == id)
+        //     .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
+        //     .SingleOrDefaultAsync();
     }
 
     public async Task<AppUser?> GetUserByUserNameAsync(string username)
@@ -83,10 +83,5 @@ public class UserRepository : IUserRepository
             query.ProjectTo<MemberDto>(_mapper.ConfigurationProvider),
             userParams.PageNumber,
             userParams.PageSize);
-    }
-
-    Task<AppUser?> IUserRepository.GetUserByIdAsync(int id)
-    {
-        throw new NotImplementedException();
     }
 }
