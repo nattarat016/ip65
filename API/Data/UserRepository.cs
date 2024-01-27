@@ -18,6 +18,7 @@ public class UserRepository : IUserRepository
         _mapper = mapper;
         _dataContext = dataContext;
     }
+
     public async Task<AppUser?> GetUserByIdAsync(int id)
     {
         return await _dataContext.Users.FindAsync(id);
@@ -82,11 +83,5 @@ public class UserRepository : IUserRepository
             userParams.PageSize);
         // return await PageList<MemberDto>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
     }
-
-    public object? GetMembersAsync(ClaimsPrincipal user)
-    {
-        throw new NotImplementedException();
-    }
-
 
 }
