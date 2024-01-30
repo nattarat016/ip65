@@ -2,7 +2,7 @@
 
 namespace API.Helpers;
 
-public class UserParams
+public class UserParams : PaginationParams
 {
     private const int MaxPageSize = 50; //ป้องกัน user กำหนด pagesize เยอะเกินไป เช่น ล้านล้าน
     public int PageNumber { get; set; } = 1;

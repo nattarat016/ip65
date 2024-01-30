@@ -15,35 +15,35 @@ export class MembersService {
   baseUrl = environment.apiUrl
   members: Member[] = []
   memberCache = new Map()
-  userParams: UserParams | undefined
+  // userParams: UserParams | undefined
   user: User | undefined
   // paginationResult: PaginationResult<Member[]> = new PaginationResult<Member[]>
 
 
   constructor(private accountService: AccountService, private http: HttpClient) {
-    this.accountService.currentUser$.pipe(take(1)).subscribe({
-      next: user => {
-        if (user) {
-          this.userParams = new UserParams(user)
-          this.user = user
-        }
-      }
-    })
+    // this.accountService.currentUser$.pipe(take(1)).subscribe({
+    //   next: user => {
+    //     if (user) {
+    //       this.userParams = new UserParams(user)
+    //       this.user = user
+    //     }
+    //   }
+    // })
   }
 
-  getUserParams() {
-    return this.userParams
-  }
+  // getUserParams() {
+  //   return this.userParams
+  // }
 
-  setUserParams(params: UserParams) {
-    this.userParams = params
-  }
+  // setUserParams(params: UserParams) {
+  //   this.userParams = params
+  // }
 
-  resetUserParams() {
-    if (!this.user) return
-    this.userParams = new UserParams(this.user)
-    return this.userParams
-  }
+  // resetUserParams() {
+  //   if (!this.user) return
+  //   this.userParams = new UserParams(this.user)
+  //   return this.userParams
+  // }
 
   private _key(userParams: UserParams) {
     return Object.values(userParams).join('_')
@@ -134,6 +134,14 @@ export class MembersService {
   deletePhoto(photoId: number) {
     const endpoint = this.baseUrl + 'users/delete-photo/' + photoId
     return this.http.delete(endpoint)
+  }
+
+  addLike(username: string) {
+    return this.http.post(this.baseUrl + 'likes/' + username, {})
+  }
+
+  getLikes(predicate: string) {
+    return this.http.get<Member[]>(this.baseUrl + 'likes?predicate=' + predicate)
   }
 
 }
