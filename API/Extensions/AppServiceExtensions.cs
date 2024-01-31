@@ -26,10 +26,8 @@ public static class AppServiceExtensions
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<LogUserActivity>();
         services.AddScoped<IlikesRepository, LikesRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
         // services.AddSingleton<ExceptionMiddleware>();
-
-
-
 
         return services;
     }

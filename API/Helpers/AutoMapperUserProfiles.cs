@@ -22,6 +22,21 @@ public class AutoMapperUserProfiles : Profile
                 user => user.Age,
                 opt => opt.MapFrom(user => user.BirthDate.CalculateAge())
             );
+
+        CreateMap<Message, MessageDto>()
+                    .ForMember(
+                        msdto => msdto.SenderPhotoUrl,
+                        opt => opt.MapFrom(
+                                ms => ms.Sender.Photos.FirstOrDefault(photo => photo.IsMain).Url
+                            )
+                    )
+                    .ForMember(
+                        msdto => msdto.RecipientPhotoUrl,
+                        opt => opt.MapFrom(
+                                ms => ms.Recipient.Photos.FirstOrDefault(photo => photo.IsMain).Url
+                            )
+                    );
+
         CreateMap<Photo, PhotoDto>();
         CreateMap<MemberUpdateDto, AppUser>();
         CreateMap<RegisterDto, AppUser>();
