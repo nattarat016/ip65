@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { Message } from '../_models/Message'
 import { Pagination } from '../_models/pagination'
 import { MessageService } from '../_services/message.service'
+import { faEnvelope, faEnvelopeOpen, faPaperPlane, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-messages',
@@ -14,6 +15,10 @@ export class MessagesComponent implements OnInit {
   label = 'Unread'  // 'Inbox'
   pageNumber = 1
   pageSize = 5
+faEnvelopeOpen = faEnvelopeOpen
+faEnvelope= faEnvelope
+faPaperPlane= faPaperPlane
+faTrashCan= faTrashCan
 
   constructor(private messageService: MessageService) { }
   ngOnInit(): void {

@@ -21,4 +21,9 @@ export class MessageService {
     return getPaginationResult<Message[]>(url, httpParams, this.http)
   }
 
+  getMessagesThread(username: string) {
+    const url = this.baseUrl + 'messages/thread/' + username
+    return this.http.get<Message[]>(url)
+  }
+
 }
