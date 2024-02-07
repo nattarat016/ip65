@@ -15,20 +15,23 @@ export class MessagesComponent implements OnInit {
   label = 'Unread'  // 'Inbox'
   pageNumber = 1
   pageSize = 5
-faEnvelopeOpen = faEnvelopeOpen
-faEnvelope= faEnvelope
-faPaperPlane= faPaperPlane
-faTrashCan= faTrashCan
+  faEnvelopeOpen = faEnvelopeOpen
+  faEnvelope = faEnvelope
+  faPaperPlane = faPaperPlane
+  faTrashCan = faTrashCan
+  loading = false
 
   constructor(private messageService: MessageService) { }
   ngOnInit(): void {
     this.loadMessage()
   }
   loadMessage() {
+    this.loading = true
     this.messageService.getMessages(this.pageNumber, this.pageSize, this.label).subscribe({
       next: response => {
         this.messages = response.result
         this.pagination = response.pagination
+        this.loading = false
       }
     })
   }
@@ -36,5 +39,11 @@ faTrashCan= faTrashCan
     if (this.pageNumber === event.page) return
     this.pageNumber = event.page
     this.loadMessage()
+  }
+
+  deleteMessage(id: number) {
+    this.messageService.deleteMessage(id).subscribe({
+      next: _ => this.messages?.splice(this.messages.findIndex(ms => ms.id === id), 1)
+    })
   }
 }

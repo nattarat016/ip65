@@ -30,32 +30,37 @@ public class LikesRepository : IlikesRepository
         return await _dataContext.Likes.FindAsync(sourceUserId, likedUserId);
     }
 
-     public async Task<PageList<LikeDto>> GetUserLikes(LikesParams likesParams) {
+    public async Task<PageList<LikeDto>> GetUserLikes(LikesParams likesParams)
     {
-        var users = _dataContext.Users.OrderBy(user => user.UserName).AsQueryable();
-        var likes = _dataContext.Likes.AsQueryable();
+        {
+            var users = _dataContext.Users.OrderBy(user => user.UserName).AsQueryable();
+            var likes = _dataContext.Likes.AsQueryable();
 
-        if (likesParams.Predicate == "liked") {
-            likes = likes.Where(like => like.SourceUserId == likesParams.UserId);
-            users = likes.Select(like => like.LikedUser!);
+            if (likesParams.Predicate == "liked")
+            {
+                likes = likes.Where(like => like.SourceUserId == likesParams.UserId);
+                users = likes.Select(like => like.LikedUser!);
+            }
+            if (likesParams.Predicate == "likedBy")
+            {
+                likes = likes.Where(like => like.LikedUserId == likesParams.UserId);
+                users = likes.Select(like => like.SourceUser!);
+            }
+
+            // return await users.Select(user => new LikeDto
+            var likedUsers = users.Select(user => new LikeDto
+            {
+
+                UserName = user.UserName,
+                Aka = user.Aka,
+                City = user.City,
+                Country = user.Country,
+                Age = user.BirthDate.CalculateAge(),
+                MainPhotoUrl = user.Photos.FirstOrDefault(photo => photo.IsMain).Url,
+                Photos = user.Photos.ToList(),
+                Id = user.Id
+            });
+            return await PageList<LikeDto>.CreateAsync(likedUsers, likesParams.PageNumber, likesParams.PageSize);
         }
-        if (likesParams.Predicate == "likedBy") {
-            likes = likes.Where(like => like.LikedUserId == likesParams.UserId);
-            users = likes.Select(like => like.SourceUser!);
-        }
-
-        // return await users.Select(user => new LikeDto
-            var likedUsers = users.Select(user => new LikeDto{
-
-            UserName = user.UserName,
-            Aka = user.Aka,
-            City = user.City,
-            Country = user.Country,
-            Age = user.BirthDate.CalculateAge(),
-            MainPhotoUrl = user.Photos.FirstOrDefault(photo => photo.IsMain).Url,
-            Id = user.Id
-        });
-        return await PageList<LikeDto>.CreateAsync(likedUsers, likesParams.PageNumber, likesParams.PageSize);
-}
-     }
+    }
 }

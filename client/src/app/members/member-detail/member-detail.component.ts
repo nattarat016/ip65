@@ -15,21 +15,33 @@ import { MessageService } from 'src/app/_services/message.service'
   templateUrl: './member-detail.component.html',
   styleUrls: ['./member-detail.component.css'],
   standalone: true,
-  imports: [CommonModule, TabsModule, GalleryModule, TimeagoModule,MemberMessagesComponent]
+  imports: [CommonModule, TabsModule, GalleryModule, TimeagoModule, MemberMessagesComponent]
 })
 
 export class MemberDetailComponent implements OnInit {
-  @ViewChild('memberTabs') memberTabs?: TabsetComponent
+  @ViewChild('memberTabs', { static: true }) memberTabs?: TabsetComponent
   activeTab?: TabDirective
   messages: Message[] = []
-  member: Member | undefined
+  // member: Member | undefined
+  member: Member = {} as Member
   photos: GalleryItem[] = []
 
 
-  constructor(private messageService: MessageService,private memberService: MembersService, private route: ActivatedRoute) { }
+  constructor(private messageService: MessageService, private memberService: MembersService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.loadMember()
+    // this.loadMember()
+    this.route.data.subscribe({
+      next: data => {
+        this.member = data['member'] //เพราะเราตั้งชื่อ member ใน app-routing.module.ts
+        this.getImages()
+      }
+    })
+    this.route.queryParams.subscribe({
+      next: params => params['tab'] && this.selectTab(params['tab'])
+    })
+
+
   }
 
   loadMember() {
@@ -50,13 +62,13 @@ export class MemberDetailComponent implements OnInit {
     }
   }
 
-  onTabActivated(tab: TabDirective) { 
+  onTabActivated(tab: TabDirective) {
     this.activeTab = tab
     if (this.activeTab.heading === 'Messages') {
       this.loadMessages()
     }
   }
-  loadMessages() { 
+  loadMessages() {
     if (!this.member) return
     this.messageService.getMessagesThread(this.member.userName).subscribe({
       next: response => this.messages = response
