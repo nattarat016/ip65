@@ -33,6 +33,7 @@
                 titlecase}}</a>
             <div *bsDropdownMenu="" class="dropdown-menu">
                 <a class="dropdown-item" routerLink="member/profile">Profile</a>
+                <a *appHasRole="['Administrator','Moderator']" class="dropdown-item" routerLink="admin">Admin</a>
                 <a href="" class="dropdown-item " (click)="logout()">Logout</a>
             </div>
         </div>
