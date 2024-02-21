@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
+#nullable disable
+
 public class MessageRepository : IMessageRepository
 {
     private readonly IMapper _mapper;
@@ -24,7 +26,7 @@ public class MessageRepository : IMessageRepository
 
     public void DeleteMessage(Message message) => _dataContext.Messages.Remove(message);
 
-    public async Task<Message?> GetMessage(int id) => await _dataContext.Messages.FindAsync(id);
+    public async Task<Message> GetMessage(int id) => await _dataContext.Messages.FindAsync(id);
 
     public async Task<IEnumerable<MessageDto>> GetMessageThread(string thisUserName, string recipientUserName)
     {
@@ -32,8 +34,12 @@ public class MessageRepository : IMessageRepository
                         .Include(ms => ms.Sender).ThenInclude(user => user!.Photos)
                         .Include(ms => ms.Recipient).ThenInclude(user => user!.Photos)
                         .Where(ms =>
-                            (ms.RecipientUsername == thisUserName && ms.IsRecipientDeleted == false && ms.SenderUsername == recipientUserName) ||
-                            (ms.RecipientUsername == recipientUserName && ms.IsSenderDeleted == false && ms.SenderUsername == thisUserName)
+                            (ms.RecipientUsername == thisUserName
+                            && ms.IsRecipientDeleted == false
+                            && ms.SenderUsername == recipientUserName) ||
+                            (ms.RecipientUsername == recipientUserName
+                            && ms.IsSenderDeleted == false
+                            && ms.SenderUsername == thisUserName)
                         )
                         // .OrderByDescending(ms => ms.DateSent)
                         .OrderBy(ms => ms.DateSent)
@@ -74,4 +80,23 @@ public class MessageRepository : IMessageRepository
     }
 
     public async Task<bool> SaveAllAsync() => await _dataContext.SaveChangesAsync() > 0;
+
+    public void AddGroup(MessageGroup group)
+    {
+        _dataContext.MessageGroups.Add(group);
+    }
+    public async Task<Connection> GetConnection(string connectionId)
+    {
+        return await _dataContext.Connections.FindAsync(connectionId);
+    }
+    public async Task<MessageGroup> GetMessageGroup(string groupName)
+    {
+        return await _dataContext.MessageGroups
+            .Include(group => group.Connections)
+            .FirstOrDefaultAsync(group => group.Name == groupName);
+    }
+    public void RemoveConnection(Connection connection)
+    {
+        _dataContext.Connections.Remove(connection);
+    }
 }
