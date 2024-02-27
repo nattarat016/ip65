@@ -33,9 +33,13 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseDefaultFiles(); // out-> index.html from wwwroot folder
+app.UseStaticFiles(); // use wwwroot folder to serve the content
+
 app.MapControllers();
 app.MapHub<PresenceHub>("hubs/presence");
 app.MapHub<MessageHub>("hubs/message");
+app.MapFallbackToController("Index", "Fallback");
 
 using var scope = app.Services.CreateScope();
 var service = scope.ServiceProvider;
@@ -47,7 +51,8 @@ try
     await dataContext.Database.MigrateAsync();
     //await dataContext.Connections.RemoveRange(dataContext.Connections);//<-- good for small scale
     //await dataContext.Database.ExecuteSqlRawAsync("TRUNCATE TABLE [Connections]"); //excellent, error for sqlite
-    await dataContext.Database.ExecuteSqlRawAsync("DELETE FROM [Connections]");
+    // await dataContext.Database.ExecuteSqlRawAsync("DELETE FROM [Connections]");
+    await Seed.ClearConnections(dataContext);
     await Seed.SeedUsers(userManager, roleManager); //<--
 }
 catch (System.Exception e)

@@ -20,6 +20,10 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dockerfile\" />
+  </ItemGroup>
+
   <!-- <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Helpers\" />
